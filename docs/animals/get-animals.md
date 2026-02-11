@@ -1,6 +1,7 @@
 # GET /animals
 
 Retrieve a list of all animals currently registered in the shelter.
+You can filter the results using optional query parameters.
 
 ---
 
@@ -12,9 +13,33 @@ Retrieve a list of all animals currently registered in the shelter.
 
 ## Query Parameters
 
-| Parameter | Type | Description | Required |
-|-----------|------|-------------|----------|
-| None      | N/A  | This endpoint does not take any parameters | No |
+| Parameter | Type    | Description                                                   | Required |
+|-----------|---------|---------------------------------------------------------------|----------|
+| status    | string  | Filter animals by adoption status: available, adopted, foster | No       |
+| species   | string  | Filter animals by species: dog, cat, rabbit                   | No       |
+| minAge    | integer | Filter animals older than or equal to this age                | No       |
+| maxAge    | integer | Filter animals younger than or equal to this age              | No       |
+
+**Example:** 
+
+`GET /animals?status=available`
+
+This request will return all animals that are available for adoption.
+
+**Example of combining multiple filters:**
+
+`GET /animals?status=available&species=dog&minAge=2`
+
+This request will return all animals that:  
+- have the status `available`  
+- are of species `dog`  
+- are at least 2 years old
+
+---
+
+## Response Fields
+
+See [Animals Overview](animals-overview.md) for full field descriptions.
 
 ---
 
@@ -43,10 +68,11 @@ Retrieve a list of all animals currently registered in the shelter.
 ]
 ```
 
+>Note: If no animals match the filter criteria, an empty list [] is returned with 200 OK.
+
 ## Response Codes
 
 | HTTP Code | Meaning                       |
 |-----------|-------------------------------|
 | 200       | Successfully returned animals |
-| 404       | No animals found              |
 | 500       | Server error                  |
