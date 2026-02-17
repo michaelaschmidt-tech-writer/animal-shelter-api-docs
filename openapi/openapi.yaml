@@ -1,1 +1,342 @@
+openapi: 3.0.3
+info:
+  title: Animal Shelter Management API
+  description: >
+    OpenAPI 3.0 specification for the Animal Shelter Management API.
+    This API allows clients to manage animals in a shelter.
+    Authentication is required for all endpoints via API key in the Authorization header.
+  version: 1.0.0
 
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+tags:
+  - name: Animals
+    description: Operations related to animal management
+
+paths:
+  /animals:
+    get:
+      tags:
+        - Animals
+      summary: Retrieve a list of all animals
+      description: Returns all animals currently registered in the shelter.
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
+      responses:
+        '200':
+          description: List of animals retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - Animals
+      summary: Add a new animal
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalInput'
+      responses:
+        '201':
+          description: Animal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /animals/{id}:
+    get:
+      tags:
+        - Animals
+      summary: Retrieve a single animal by ID
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the animal
+      responses:
+        '200':
+          description: Animal retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - Animals
+      summary: Update an existing animal
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalInput'
+      responses:
+        '200':
+          description: Animal updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Animals
+      summary: Delete an animal
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Animal deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  parameters:
+    AuthorizationHeader:
+      name: Authorization
+      in: header
+      description: API key in the format `Bearer <key>`
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    Animal:
+      type: object
+      description: Represents an animal registered in the shelter
+      properties:
+        id:
+          type: string
+          example: "a123"
+        name:
+          type: string
+          example: "Bella"
+        species:
+          type: string
+          enum: [dog, cat, rabbit]
+          example: dog
+        age:
+          type: integer
+          example: 4
+        status:
+          type: string
+          enum: [available, adopted, foster]
+          example: available
+        arrivalDate:
+          type: string
+          format: date
+          example: "2025-01-10"
+        personality:
+          type: object
+          properties:
+            friendliness:
+              type: string
+              example: high
+            energyLevel:
+              type: string
+              example: medium
+            notes:
+              type: string
+              example: Very good with children
+        technicalData:
+          type: object
+          properties:
+            size:
+              type: string
+              example: medium
+            weightKg:
+              type: number
+              example: 18.5
+            color:
+              type: string
+              example: brown
+        medicalStatus:
+          type: string
+          enum: [healthy, needs_care, critical]
+          example: healthy
+      required:
+        - id
+        - name
+        - species
+        - age
+        - status
+        - arrivalDate
+        - personality
+        - technicalData
+        - medicalStatus
+
+    AnimalInput:
+      type: object
+      description: Data required to create or update an animal
+      properties:
+        name:
+          type: string
+          example: "Luna"
+        species:
+          type: string
+          enum: [dog, cat, rabbit]
+          example: cat
+        age:
+          type: integer
+          example: 2
+        status:
+          type: string
+          enum: [available, adopted, foster]
+          example: available
+        arrivalDate:
+          type: string
+          format: date
+          example: "2026-02-01"
+        personality:
+          type: object
+          properties:
+            friendliness:
+              type: string
+              example: medium
+            energyLevel:
+              type: string
+              example: high
+            notes:
+              type: string
+              example: Friendly with other cats
+        technicalData:
+          type: object
+          properties:
+            size:
+              type: string
+              example: small
+            weightKg:
+              type: number
+              example: 4.2
+            color:
+              type: string
+              example: white
+        medicalStatus:
+          type: string
+          enum: [healthy, needs_care, critical]
+          example: healthy
+      required:
+        - name
+        - species
+        - age
+
+    AnimalList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Animal'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "404"
+            message:
+              type: string
+              example: "Animal with the specified ID not found"
+            details:
+              type: string
+              nullable: true
+              example: "No animal exists with the given ID"
+
+  responses:
+    BadRequest:
+      description: Invalid request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Forbidden:
+      description: API key does not grant access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
