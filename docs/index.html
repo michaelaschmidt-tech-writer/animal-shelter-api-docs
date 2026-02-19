@@ -2,10 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Animal Shelter API Documentation</title>
-    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+    <title>Animal Shelter API Docs (Swagger UI)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css" />
   </head>
   <body>
-    <redoc spec-url="openapi.yaml"></redoc>
+    <div id="swagger-ui"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.ui = SwaggerUIBundle({
+        url: "https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/openapi.yaml",
+        dom_id: "#swagger-ui",
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        layout: "StandaloneLayout"
+      });
+    </script>
   </body>
 </html>
