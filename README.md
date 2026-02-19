@@ -12,6 +12,10 @@ This is a portfolio project created for learning and demonstration purposes.
 
 🐶🐱🐰
 
+## 🚀 Live API Docs
+Interactive API reference (Swagger UI):  
+👉 **https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/**
+
 ## Documentation Structure
 
 The documentation is divided into conceptual and technical layers:
@@ -27,4 +31,4 @@ Designed for developers and stakeholders to understand the system concept and do
 ### Machine-Readable Specification
 Formal API definition written in OpenAPI 3.0.
 
-- 📄 [OpenAPI 3.0 Specification](openapi/openapi.yaml)
+- 📄 [OpenAPI 3.0 Specification](docs/openapi.yaml)
