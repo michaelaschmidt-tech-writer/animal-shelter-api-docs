@@ -3,7 +3,7 @@
 This repository contains structured REST API documentation for a fictional animal shelter management system.
 
 The purpose of this project is to demonstrate:
-- Docs-as-Code workflows
+- Docs-as-code workflows
 - REST API documentation best practices
 - OpenAPI specification design
 - GitHub-based collaboration
