@@ -32,3 +32,4 @@ Designed for developers and stakeholders to understand the system concept and do
 Formal API definition written in OpenAPI 3.0.
 
 - 📄 [OpenAPI 3.0 Specification](docs/openapi.yaml)
+
