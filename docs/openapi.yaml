@@ -153,6 +153,46 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /animals/{id}/photo:
+    post:
+      tags:
+        - Animals
+      summary: Upload a photo for an animal
+      description: Uploads an image file (JPEG or PNG) and associates it with the specified animal.
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the animal
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+      responses:
+        '200':
+          description: Photo uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalPhoto'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   parameters:
     AuthorizationHeader:
@@ -164,6 +204,20 @@ components:
         type: string
 
   schemas:
+
+    AnimalPhoto:
+      type: object
+      properties:
+        animalId:
+          type: string
+          example: "a123"
+        photoUrl:
+          type: string
+          example: "https://cdn.shelter.com/photos/a123.jpg"
+      required:
+        - animalId
+        - photoUrl
+
     Animal:
       type: object
       description: Represents an animal registered in the shelter
@@ -217,6 +271,10 @@ components:
           type: string
           enum: [healthy, needs_care, critical]
           example: healthy
+        photoUrl:
+          type: string
+          nullable: true
+          example: "https://cdn.shelter.com/photos/a123.jpg"
       required:
         - id
         - name
