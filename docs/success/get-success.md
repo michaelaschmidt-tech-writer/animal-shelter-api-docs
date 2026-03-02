@@ -60,7 +60,7 @@ See [Success Overview](success-overview.md) for full field descriptions.
     "title": "Bella found her forever home!",
     "description": "When Bella first arrived at the shelter, she was so scared she barely lifted her head. She refused food for days and hid in the back of her kennel. But the Müller Family brought patience, calm energy, and kindness. Today, Bella loves long walks in the woods, proudly claims her place on the couch, and has even befriended the family's cats. From a frightened soul to a happy, curious companion — Bella finally found her forever home.",
     "adoptionDate": "2026-02-05",
-    "adopter": "Müller Family"
+    "adopter": "Müller Family",
     "photoUrl": "https://cdn.shelter.com/success/s789.jpg"
   },
   {
@@ -69,7 +69,7 @@ See [Success Overview](success-overview.md) for full field descriptions.
     "title": "Max is now the king of his castle!",
     "description": "Max quickly settled into his new home and immediately claimed every sunny spot he could find.",
     "adoptionDate": "2026-02-12",
-    "adopter": "Thompson Family"
+    "adopter": "Thompson Family",
     "photoUrl": "https://cdn.shelter.com/success/s790.jpg"
   }
 ]
