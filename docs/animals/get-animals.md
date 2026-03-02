@@ -55,7 +55,8 @@ See [Animals Overview](animals-overview.md) for full field descriptions.
     "species": "dog",
     "age": 4,
     "status": "available",
-    "arrivalDate": "2025-01-10"
+    "arrivalDate": "2025-01-10",
+    "photoUrl": "https://cdn.shelter.com/photos/a123.jpg"
   },
   {
     "id": "a124",
@@ -63,7 +64,8 @@ See [Animals Overview](animals-overview.md) for full field descriptions.
     "species": "cat",
     "age": 2,
     "status": "foster",
-    "arrivalDate": "2025-01-15"
+    "arrivalDate": "2025-01-15",
+    "photoUrl": null
   }
 ]
 ```
