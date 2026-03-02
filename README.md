@@ -25,6 +25,7 @@ Designed for developers and stakeholders to understand the system concept and do
 
 - 📘 [Project Overview](docs/overview.md)
 - 🐾 [Animal Domain Documentation](docs/animals/animals-overview.md)
+- 🌟 [Success Stories Resource Documentation](docs/success/success-overview.md)
 - 🔐 [Authentication](docs/authentication.md)
 - ⚠️ [Error Responses](docs/errors.md)
 
