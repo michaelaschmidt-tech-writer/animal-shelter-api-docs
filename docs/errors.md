@@ -30,13 +30,13 @@ Each error response follows this structure:
 
 ## Common Error Codes
 
-| HTTP Code | Meaning                                 |
-|-----------|-----------------------------------------|
-| 400       | Invalid request body                    |
-| 401       | Unauthorized / Missing API key          |
-| 403       | Forbidden / Invalid API key             |
-| 404       | Animal with the specified ID not found  |
-| 500       | Server error                            |
+| HTTP Code | Meaning                                   |
+|-----------|-------------------------------------------|
+| 400       | Invalid request body                      |
+| 401       | Unauthorized / Missing API key            |
+| 403       | Forbidden / Invalid API key               |
+| 404       | Resource with the specified ID not found  |
+| 500       | Server error                              |
 
 ---
 
@@ -80,8 +80,8 @@ Each error response follows this structure:
 {
   "error": {
     "code": "404",
-    "message": "Animal with the specified ID not found",
-    "details": "No animal exists with the given ID."
+    "message": "Resource with the specified ID not found",
+    "details": "No matching resource exists with the provided ID."
   }
 }
 ```
