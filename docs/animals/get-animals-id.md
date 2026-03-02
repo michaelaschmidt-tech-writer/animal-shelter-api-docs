@@ -43,15 +43,17 @@ See [Animals Overview](animals-overview.md) for full field descriptions.
   "status": "available",
   "arrivalDate": "2025-01-10",
   "personality": {
-    "friendly": true,
-    "playful": true
+    "friendliness": "high",
+    "energyLevel": "medium",
+    "notes": "Very good with children"
   },
   "technicalData": {
     "size": "medium",
-    "weight": 20,
+    "weightKg": 18.5,
     "color": "brown"
   },
-  "medicalStatus": "healthy"
+  "medicalStatus": "healthy",
+  "photoUrl": "https://cdn.shelter.com/photos/a123.jpg"
 }
 ```
 
