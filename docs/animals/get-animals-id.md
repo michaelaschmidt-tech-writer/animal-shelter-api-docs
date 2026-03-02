@@ -10,7 +10,7 @@ Retrieve the details of a single animal by its unique ID.
 
 ---
 
-**Path Parameter:**
+## Path Parameter:
 
 | Parameter | Type   | Description                     | Required |
 |-----------|--------|---------------------------------|----------|
