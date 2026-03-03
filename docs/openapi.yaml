@@ -1,21 +1,33 @@
 openapi: 3.0.3
+
 info:
   title: Animal Shelter Management API
   description: >
-    OpenAPI 3.0 specification for the Animal Shelter Management API.
-    This API allows clients to manage animals in a shelter.
-    Authentication is required for all endpoints via API key in the Authorization header.
-  version: 1.0.0
+    This API powers a demonstration backend for managing animals in a shelter.
+    It showcases best practices in RESTful API design and OpenAPI documentation.
+    The API allows clients to register animals, update their data, upload photos,
+    and maintain adoption success stories. Created for portfolio and learning purposes.
+  version: 1.1.0
+  contact:
+    name: Michaela Schmidt
+    url: https://github.com/michaelaschmidt-tech-writer
+  license:
+    name: MIT
 
 servers:
+  - url: https://api.shelter-demo.com
+    description: Production (demo only)
   - url: http://localhost:3000
     description: Local development server
 
 tags:
   - name: Animals
-    description: Operations related to animal management
+    description: Endpoints for managing animals in the shelter.
   - name: Success
-    description: Operations related to adoption success stories
+    description: Endpoints for managing adoption success stories.
+
+security:
+  - ApiKeyAuth: []
 
 paths:
 
@@ -27,9 +39,7 @@ paths:
     get:
       tags: [Animals]
       summary: Retrieve a list of all animals
-      description: Returns all animals currently registered in the shelter.
-      parameters:
-        - $ref: '#/components/parameters/AuthorizationHeader'
+      description: Returns a full list of animals currently registered in the shelter.
       responses:
         '200':
           description: List of animals retrieved successfully
@@ -37,15 +47,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AnimalList'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+              examples:
+                sample:
+                  summary: Example animal list
+                  value:
+                    - id: "a123"
+                      name: "Bella"
+                      species: "dog"
+                      age: 4
+                      status: "available"
+                    - id: "a124"
+                      name: "Luna"
+                      species: "cat"
+                      age: 2
+                      status: "foster"
         '500': { $ref: '#/components/responses/InternalServerError' }
 
     post:
       tags: [Animals]
       summary: Add a new animal
-      parameters:
-        - $ref: '#/components/parameters/AuthorizationHeader'
+      description: Creates a new animal entry with the provided information.
       requestBody:
         required: true
         content:
@@ -57,11 +78,8 @@ paths:
           description: Animal created successfully
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Animal'
+              schema: { $ref: '#/components/schemas/Animal' }
         '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
         '500': { $ref: '#/components/responses/InternalServerError' }
 
   /animals/{id}:
@@ -69,80 +87,49 @@ paths:
       tags: [Animals]
       summary: Retrieve a single animal by ID
       parameters:
-        - $ref: '#/components/parameters/AuthorizationHeader'
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
-          description: Unique identifier of the animal
+        - $ref: '#/components/parameters/AnimalId'
       responses:
         '200':
           description: Animal retrieved successfully
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Animal'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+              schema: { $ref: '#/components/schemas/Animal' }
         '404': { $ref: '#/components/responses/NotFound' }
-        '500': { $ref: '#/components/responses/InternalServerError' }
 
     put:
       tags: [Animals]
       summary: Update an existing animal
       parameters:
-        - $ref: '#/components/parameters/AuthorizationHeader'
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/AnimalId'
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/AnimalInput'
+            schema: { $ref: '#/components/schemas/AnimalInput' }
       responses:
         '200':
           description: Animal updated successfully
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Animal'
+              schema: { $ref: '#/components/schemas/Animal' }
         '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
-        '500': { $ref: '#/components/responses/InternalServerError' }
 
     delete:
       tags: [Animals]
       summary: Delete an animal
       parameters:
-        - $ref: '#/components/parameters/AuthorizationHeader'
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/AnimalId'
       responses:
         '204': { description: Animal deleted successfully }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
-        '500': { $ref: '#/components/responses/InternalServerError' }
 
   /animals/{id}/photo:
     post:
       tags: [Animals]
       summary: Upload a photo for an animal
-      description: Uploads an image file (JPEG or PNG) and associates it with the specified animal.
       parameters:
-        - $ref: '#/components/parameters/AuthorizationHeader'
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
-          description: Unique identifier of the animal
+        - $ref: '#/components/parameters/AnimalId'
       requestBody:
         required: true
         content:
@@ -153,17 +140,16 @@ paths:
                 file:
                   type: string
                   format: binary
+                  description: JPEG or PNG image file.
               required: [file]
       responses:
         '200':
           description: Photo uploaded successfully
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/AnimalPhoto'
+              schema: { $ref: '#/components/schemas/AnimalPhoto' }
         '400': { $ref: '#/components/responses/BadRequest' }
         '404': { $ref: '#/components/responses/NotFound' }
-        '500': { $ref: '#/components/responses/InternalServerError' }
 
 
   ##############################################################
@@ -174,110 +160,78 @@ paths:
     get:
       tags: [Success]
       summary: Retrieve all success stories
-      parameters:
-        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         '200':
           description: List of success stories
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/SuccessList"
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+              schema: { $ref: '#/components/schemas/SuccessList' }
+        '500': { $ref: '#/components/responses/InternalServerError' }
 
     post:
       tags: [Success]
       summary: Create a new success story
-      parameters:
-        - $ref: "#/components/parameters/AuthorizationHeader"
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: "#/components/schemas/SuccessStoryInput"
+            schema: { $ref: '#/components/schemas/SuccessStoryInput' }
       responses:
         '201':
           description: Success story created
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/SuccessStory"
-        '400': { $ref: "#/components/responses/BadRequest" }
-        '404': { $ref: "#/components/responses/NotFound" }
-        '500': { $ref: "#/components/responses/InternalServerError" }
+              schema: { $ref: '#/components/schemas/SuccessStory' }
+        '400': { $ref: '#/components/responses/BadRequest' }
 
   /success/{id}:
     get:
       tags: [Success]
       summary: Retrieve a success story by ID
       parameters:
-        - $ref: "#/components/parameters/AuthorizationHeader"
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/SuccessId'
       responses:
         '200':
           description: Success story retrieved
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/SuccessStory"
-        '404': { $ref: "#/components/responses/NotFound" }
-        '500': { $ref: "#/components/responses/InternalServerError" }
+              schema: { $ref: '#/components/schemas/SuccessStory' }
+        '404': { $ref: '#/components/responses/NotFound' }
 
     put:
       tags: [Success]
       summary: Update a success story
       parameters:
-        - $ref: "#/components/parameters/AuthorizationHeader"
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/SuccessId'
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: "#/components/schemas/SuccessStoryInput"
+            schema: { $ref: '#/components/schemas/SuccessStoryInput' }
       responses:
         '200':
           description: Success story updated
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/SuccessStory"
-        '400': { $ref: "#/components/responses/BadRequest" }
-        '404': { $ref: "#/components/responses/NotFound" }
-        '500': { $ref: "#/components/responses/InternalServerError" }
+              schema: { $ref: '#/components/schemas/SuccessStory' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
 
     delete:
       tags: [Success]
       summary: Delete a success story
       parameters:
-        - $ref: "#/components/parameters/AuthorizationHeader"
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/SuccessId'
       responses:
         '204': { description: Success story deleted }
-        '404': { $ref: "#/components/responses/NotFound" }
-        '500': { $ref: "#/components/responses/InternalServerError" }
+        '404': { $ref: '#/components/responses/NotFound' }
 
   /success/{id}/photo:
     post:
       tags: [Success]
       summary: Upload a photo for a success story
       parameters:
-        - $ref: "#/components/parameters/AuthorizationHeader"
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/SuccessId'
       requestBody:
         required: true
         content:
@@ -288,164 +242,142 @@ paths:
                 file:
                   type: string
                   format: binary
+                  description: JPEG or PNG image.
               required: [file]
       responses:
         '200':
           description: Photo uploaded successfully
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/SuccessPhoto"
-        '400': { $ref: "#/components/responses/BadRequest" }
-        '404': { $ref: "#/components/responses/NotFound" }
-        '500': { $ref: "#/components/responses/InternalServerError" }
+              schema: { $ref: '#/components/schemas/SuccessPhoto' }
+        '404': { $ref: '#/components/responses/NotFound' }
 
+
+##############################################################
+# COMPONENTS
+##############################################################
 
 components:
-  parameters:
-    AuthorizationHeader:
-      name: Authorization
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
       in: header
-      description: API key in the format `Bearer <key>`
+      name: Authorization
+
+  parameters:
+    AnimalId:
+      name: id
+      in: path
       required: true
-      schema:
-        type: string
+      schema: { type: string }
+      description: Unique identifier of the animal.
+
+    SuccessId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+      description: Unique identifier of the success story.
 
   schemas:
 
     ##############################################################
-    # SCHEMA: SUCCESS STORIES
+    # SUCCESS STORIES
     ##############################################################
 
     SuccessStory:
       type: object
+      description: Details about an adoption success story.
       properties:
         id:
           type: string
           example: "s789"
         animalId:
           type: string
-          example: "a123"
         title:
           type: string
-          example: "Bella found her forever home!"
+          description: Short headline describing the success story.
         description:
           type: string
         adoptionDate:
           type: string
           format: date
-          example: "2026-02-05"
         adopter:
           type: string
-          example: "Müller Family"
         photoUrl:
           type: string
           nullable: true
-          example: "https://cdn.shelter.com/success/s789.jpg"
-      required:
-        - id
-        - animalId
-        - title
-        - description
-        - adoptionDate
-        - adopter
+      required: [id, animalId, title, description, adoptionDate, adopter]
 
     SuccessStoryInput:
       type: object
+      description: Data required to create or update a success story.
       properties:
-        animalId:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        adoptionDate:
-          type: string
-          format: date
-        adopter:
-          type: string
-      required:
-        - animalId
-        - title
-        - description
-        - adoptionDate
-        - adopter
+        animalId: { type: string }
+        title: { type: string }
+        description: { type: string }
+        adoptionDate: { type: string, format: date }
+        adopter: { type: string }
+      required: [animalId, title, description, adoptionDate, adopter]
 
     SuccessList:
       type: array
-      items:
-        $ref: '#/components/schemas/SuccessStory'
+      items: { $ref: '#/components/schemas/SuccessStory' }
 
     SuccessPhoto:
       type: object
       properties:
-        id:
-          type: string
-          example: "s789"
-        photoUrl:
-          type: string
-          example: "https://cdn.shelter.com/success/s789.jpg"
-      required:
-        - id
-        - photoUrl
+        id: { type: string }
+        photoUrl: { type: string }
+      required: [id, photoUrl]
 
 
     ##############################################################
-    # SCHEMA: ANIMALS
+    # ANIMALS
     ##############################################################
 
     AnimalPhoto:
       type: object
       properties:
-        animalId:
-          type: string
-          example: "a123"
-        photoUrl:
-          type: string
-          example: "https://cdn.shelter.com/photos/a123.jpg"
-      required:
-        - animalId
-        - photoUrl
+        animalId: { type: string }
+        photoUrl: { type: string }
+      required: [animalId, photoUrl]
 
     Animal:
       type: object
-      description: Represents an animal registered in the shelter
+      description: Represents an animal registered in the shelter.
       properties:
-        id: { type: string, example: "a123" }
-        name: { type: string, example: "Bella" }
+        id: { type: string }
+        name: { type: string }
         species:
           type: string
           enum: [dog, cat, rabbit]
-          example: dog
-        age: { type: integer, example: 4 }
+        age: { type: integer }
         status:
           type: string
           enum: [available, adopted, foster]
-          example: available
         arrivalDate:
           type: string
           format: date
-          example: "2025-01-10"
         personality:
           type: object
           properties:
-            friendliness: { type: string, example: high }
-            energyLevel: { type: string, example: medium }
-            notes: { type: string, example: Very good with children }
+            friendliness: { type: string }
+            energyLevel: { type: string }
+            notes: { type: string }
         technicalData:
           type: object
           properties:
-            size: { type: string, example: medium }
-            weightKg: { type: number, example: 18.5 }
-            color: { type: string, example: brown }
+            size: { type: string }
+            weightKg: { type: number }
+            color: { type: string }
         medicalStatus:
           type: string
           enum: [healthy, needs_care, critical]
-          example: healthy
         photoUrl:
           type: string
           nullable: true
-          example: "https://cdn.shelter.com/photos/a123.jpg"
       required:
         - id
         - name
@@ -459,47 +391,35 @@ components:
 
     AnimalInput:
       type: object
-      description: Data required to create or update an animal
+      description: Data required to create or update an animal.
       properties:
-        name: { type: string, example: "Luna" }
+        name: { type: string }
         species:
           type: string
           enum: [dog, cat, rabbit]
-          example: cat
-        age: { type: integer, example: 2 }
+        age: { type: integer }
         status:
           type: string
           enum: [available, adopted, foster]
-          example: available
         arrivalDate:
           type: string
           format: date
-          example: "2026-02-01"
         personality:
           type: object
           properties:
-            friendliness: { type: string, example: medium }
-            energyLevel: { type: string, example: high }
-            notes: { type: string, example: Friendly with other cats }
+            friendliness: { type: string }
+            energyLevel: { type: string }
+            notes: { type: string }
         technicalData:
           type: object
           properties:
-            size: { type: string, example: small }
-            weightKg: { type: number, example: 4.2 }
-            color: { type: string, example: white }
+            size: { type: string }
+            weightKg: { type: number }
+            color: { type: string }
         medicalStatus:
           type: string
           enum: [healthy, needs_care, critical]
-          example: healthy
-      required:
-        - name
-        - species
-        - age
-
-    AnimalList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Animal'
+      required: [name, species, age]
 
     Error:
       type: object
@@ -507,37 +427,25 @@ components:
         error:
           type: object
           properties:
-            code: { type: string, example: "404" }
-            message: { type: string, example: "Resource with the specified ID not found" }
-            details: { type: string, nullable: true, example: "No matching resource exists with the given ID" }
+            code: { type: string }
+            message: { type: string }
+            details: { type: string, nullable: true }
 
   responses:
     BadRequest:
-      description: Invalid request body
-      content:
-        application/json:
-          schema: { $ref: '#/components/schemas/Error' }
-
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema: { $ref: '#/components/schemas/Error' }
-
-    Forbidden:
-      description: API key does not grant access
+      description: Invalid request body.
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
 
     NotFound:
-      description: Resource not found
+      description: Resource not found.
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
 
     InternalServerError:
-      description: Server error
+      description: Server error.
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
