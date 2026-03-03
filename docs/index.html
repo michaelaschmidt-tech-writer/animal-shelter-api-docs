@@ -6,105 +6,203 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Swagger UI CSS -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css"/>
 
   <style>
     :root {
-      --brand: #5e35b1;
-      --bg: #f7f7fb;
-      --border: #e0e0e0;
-      --text: #333;
+      --brand: #6C63FF;
+      --brand-dark: #5148CC;
+      --bg: #F4F4FA;
+      --text: #2A2A2A;
+      --card: #FFFFFF;
+      --border: #E0E0E0;
     }
-    body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); }
+    :root.dark {
+      --bg: #1e1e2e;
+      --text: #EEEEEE;
+      --card: #2b2b40;
+      --border: #3a3a55;
+      --brand: #8B80FF;
+      --brand-dark: #7267E0;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 20px; background: var(--brand); color: white;
+      padding: 16px 24px;
+      background: var(--brand);
+      color: white;
     }
-    .title { font-size: 1.4rem; font-weight: 700; }
-    .tabs { display: flex; gap: 10px; }
-    .tab-btn {
-      padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,.2);
-      border: 1px solid transparent; cursor: pointer; color: white;
-    }
-    .tab-btn[aria-selected="true"] { background: white; color: var(--brand); }
-    .panel { display: none; }
-    .panel.active { display: block; }
-    .container { padding: 20px; }
 
-    .docs-layout { display: grid; grid-template-columns: 260px 1fr; gap: 22px; }
+    .title-area {
+      display:flex;align-items:center;gap:14px;
+    }
+
+    .logo svg {
+      width:32px;
+      height:32px;
+      fill:white;
+      transition: fill 0.3s;
+    }
+
+    .title {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .tabs { display: flex; gap: 10px; }
+
+    .tab-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      color: white;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn[aria-selected="true"] { background:white;color:var(--brand-dark); }
+
+    #theme-toggle {
+      margin-left:20px;
+      cursor:pointer;
+      padding:8px 14px;
+      background:white;
+      color:var(--brand-dark);
+      border-radius:20px;
+      font-weight:600;
+      border:none;
+    }
+
+    .panel { display:none; }
+    .panel.active { display:block; }
+
+    .container { padding:24px; }
+
+    .docs-layout {
+      display:grid;
+      grid-template-columns:250px 1fr;
+      gap:22px;
+    }
+
     .sidebar {
-      background: white; border: 1px solid var(--border);
-      border-radius: 12px; padding: 15px;
-      height: calc(100vh - 140px); overflow-y: auto;
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+      height: calc(100vh - 140px);
+      position:sticky;
+      top:22px;
+      overflow-y:auto;
+      transition: background 0.3s, border 0.3s;
     }
+
     .sidebar a {
-      display: block; padding: 10px; text-decoration: none; color: var(--text);
-      border-left: 4px solid transparent;
+      display:block;
+      padding:10px;
+      color:var(--text);
+      text-decoration:none;
+      border-left:4px solid transparent;
+      transition: background 0.2s, border-left-color 0.2s;
     }
-    .sidebar a:hover { background: #eee5ff; border-left-color: var(--brand); }
+    .sidebar a:hover {
+      background:rgba(108,99,255,0.10);
+      border-left-color:var(--brand);
+    }
+
     .block {
-      background: white; padding: 20px; border: 1px solid var(--border);
-      border-radius: 12px; margin-bottom: 20px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:20px;
+      margin-bottom:22px;
+      transition: background 0.3s, border 0.3s;
     }
-    .section-title { margin-bottom: 10px; font-size: 1.4rem; }
+
+    .section-title {
+      margin:0 0 12px;
+      font-size:1.4rem;
+      font-weight:600;
+    }
+
     .code {
-      background: #272822; color: #f8f8f2; padding: 10px; border-radius: 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#272822;
+      color:#f8f8f2;
+      padding:14px;
+      border-radius:10px;
+      overflow-x:auto;
     }
   </style>
 </head>
 
 <body>
   <div class="topbar">
-    <div class="title">Animal Shelter API</div>
-    <div class="tabs">
+    <div class="title-area">
+      <div class="logo">
+        <!-- Pfoten-Logo Nr. 2 -->
+        <svg viewBox="0 0 24 24">
+          <circle cx="7" cy="8" r="3"/>
+          <circle cx="17" cy="8" r="3"/>
+          <circle cx="9.5" cy="4.5" r="3"/>
+          <circle cx="14.5" cy="4.5" r="3"/>
+          <path d="M12 13c-4.418 0-8 2.239-8 5s3.582 5 8 5 8-2.239 8-5-3.582-5-8-5z"/>
+        </svg>
+      </div>
+      <div class="title">Animal Shelter API</div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;">
       <button class="tab-btn" id="tab-swagger" aria-selected="true">Swagger UI</button>
       <button class="tab-btn" id="tab-docs" aria-selected="false">Docs</button>
+      <button id="theme-toggle">🌙 Dark Mode</button>
     </div>
   </div>
 
   <div class="container">
 
-    <!-- SWAGGER PANEL -->
+    <!-- SWAGGER -->
     <section id="panel-swagger" class="panel active">
       <div id="swagger-ui"></div>
     </section>
 
-    <!-- DOCS PANEL -->
+    <!-- DOCS -->
     <section id="panel-docs" class="panel">
       <div class="docs-layout">
 
-        <!-- Sidebar -->
         <nav class="sidebar">
-          <a href="#intro">Introduction</a>
-          <a href="#auth">Authentication</a>
-          <a href="#endpoint-list">All Endpoints</a>
-          <a href="#redoc-view">API Viewer</a>
+          #introIntroduction</a>
+          #authAuthentication</a>
+          #endpoint-listAll Endpoints</a>
+          #redoc-viewAPI Viewer</a>
         </nav>
 
-        <!-- Content -->
         <main class="content">
 
           <div id="intro" class="block">
             <h2 class="section-title">Introduction</h2>
-            <p>This is the portfolio API created by Michaela Schmidt.</p>
+            <p>This API showcases professional documentation for portfolio purposes.</p>
           </div>
 
           <div id="auth" class="block">
             <h2 class="section-title">Authentication</h2>
             <pre class="code">Authorization: Bearer &lt;your-api-key&gt;</pre>
-            <p>You can use any fake token.</p>
+            <p>Any placeholder token works for demo.</p>
           </div>
 
-          <!-- AUTO ENDPOINT LIST -->
           <div id="endpoint-list" class="block">
             <h2 class="section-title">All API Endpoints</h2>
-            <p>Automatically generated from <code>openapi.yaml</code>.</p>
+            <p>Automatically generated from your OpenAPI file.</p>
             <ul id="endpoint-list-content"></ul>
           </div>
 
-          <!-- REDOC VIEWER -->
           <div id="redoc-view" class="block">
             <h2 class="section-title">API Viewer (Redoc)</h2>
             <div id="redoc-container"></div>
@@ -115,17 +213,13 @@
     </section>
   </div>
 
-  <!-- Swagger UI JS -->
+  <!-- JS libs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"></script>
-
-  <!-- Redoc -->
   <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-
-  <!-- YAML Parser -->
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 
-  <!-- INIT SCRIPT -->
+  <!-- INIT -->
   <script>
     const OPENAPI_URL = "openapi.yaml";
 
@@ -161,37 +255,37 @@
     // Redoc
     Redoc.init(OPENAPI_URL, {}, document.getElementById("redoc-container"));
 
-    // AUTO-GENERATED ENDPOINT LIST
+    // Generate Endpoint List
     async function generateEndpointList() {
-      try {
-        const response = await fetch(OPENAPI_URL);
-        const yamlText = await response.text();
-        const spec = jsyaml.load(yamlText);
+      const response = await fetch(OPENAPI_URL);
+      const spec = jsyaml.load(await response.text());
+      const list = document.getElementById("endpoint-list-content");
 
-        const list = document.getElementById("endpoint-list-content");
-        list.innerHTML = "";
+      const order = ["get","post","put","patch","delete"];
+      const paths = spec.paths || {};
 
-        const paths = spec.paths || {};
-        const order = ["get", "post", "put", "patch", "delete"];
-
-        Object.keys(paths).sort().forEach(path => {
-          Object.keys(paths[path])
-            .filter(m => order.includes(m))
-            .sort((a, b) => order.indexOf(a) - order.indexOf(b))
-            .forEach(method => {
-              const li = document.createElement("li");
-              li.innerHTML = `<code>${method.toUpperCase()}</code> ${path}`;
-              list.appendChild(li);
-            });
-        });
-
-      } catch (e) {
-        console.error("Endpoint list error:", e);
-      }
+      Object.keys(paths).sort().forEach(path => {
+        Object.keys(paths[path])
+          .filter(m => order.includes(m))
+          .sort((a,b) => order.indexOf(a)-order.indexOf(b))
+          .forEach(method => {
+            const li = document.createElement("li");
+            li.innerHTML = `<code>${method.toUpperCase()}</code> ${path}`;
+            list.appendChild(li);
+          });
+      });
     }
-
     generateEndpointList();
-  </script>
 
+    // DARK MODE TOGGLE
+    const toggle = document.getElementById("theme-toggle");
+    toggle.onclick = () => {
+      document.documentElement.classList.toggle("dark");
+      toggle.textContent =
+        document.documentElement.classList.contains("dark")
+          ? "☀️ Light Mode"
+          : "🌙 Dark Mode";
+    };
+  </script>
 </body>
 </html>
