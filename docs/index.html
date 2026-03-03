@@ -71,13 +71,14 @@
       <div id="swagger-ui"></div>
     </section>
 
-    <!-- DOCS PANELpanel">
+    <!-- DOCS PANEL -->
+    <section id="panel-docs" class="panel">
       <div class="docs-layout">
 
         <!-- Sidebar -->
         <nav class="sidebar">
-          #introIntroduction</a>
-          #authAuthentication</a>
+          <a href="#intro">Introduction</a>
+          <a href="#auth">Authentication</a>
           <a href="#endpoint-list">All Endpoints</a>
           <a href="#redoc-view">API Viewer</a>
         </nav>
@@ -185,3 +186,12 @@
         });
 
       } catch (e) {
+        console.error("Endpoint list error:", e);
+      }
+    }
+
+    generateEndpointList();
+  </script>
+
+</body>
+</html>
