@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css"/>
 
   <style>
+    /* ---------- THEME TOKENS ---------- */
     :root {
       --brand: #6C63FF;
       --brand-dark: #5148CC;
@@ -16,129 +17,157 @@
       --text: #2A2A2A;
       --card: #FFFFFF;
       --border: #E0E0E0;
+      --muted: #5b5b73;
+      --code-bg: #272822;
+      --code-fg: #f8f8f2;
     }
     :root.dark {
       --bg: #1e1e2e;
-      --text: #EEEEEE;
-      --card: #2b2b40;
-      --border: #3a3a55;
+      --text: #FAFAFA;        /* Heller! */
+      --card: #2f2f43;        /* Etwas heller als zuvor */
+      --border: #47475b;
       --brand: #8B80FF;
       --brand-dark: #7267E0;
+      --muted: #c7c7da;
+      --code-bg: #171821;
+      --code-fg: #f0f0ff;
     }
 
+    /* ---------- GLOBAL ---------- */
+    html, body { height: 100%; }
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       transition: background 0.3s, color 0.3s;
     }
 
+    /* ---------- TOPBAR ---------- */
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 24px;
       background: var(--brand);
       color: white;
     }
+    .title-area { display:flex; align-items:center; gap:14px; }
+    .title { font-size: 1.6rem; font-weight: 700; letter-spacing: .2px; }
 
-    .title-area {
-      display:flex;align-items:center;gap:14px;
-    }
-
+    /* Paw logo (SVG inline) */
     .logo svg {
-      width:32px;
-      height:32px;
-      fill:white;
-      transition: fill 0.3s;
+      width: 32px; height: 32px;
+      display: block;
+      transition: filter .3s, transform .2s ease;
+      /* leichte Glanzwirkung im Light-Mode */
+      filter: drop-shadow(0 1px 0 rgba(255,255,255,.2));
     }
-
-    .title {
-      font-size: 1.6rem;
-      font-weight: 700;
-    }
+    .logo:hover svg { transform: scale(1.04); }
 
     .tabs { display: flex; gap: 10px; }
-
     .tab-btn {
-      padding: 8px 18px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.2);
-      cursor: pointer;
-      color: white;
-      border: 1px solid transparent;
-      font-weight: 600;
-      transition: background 0.2s, color 0.2s;
+      padding: 8px 18px; border-radius: 20px;
+      background: rgba(255,255,255,0.22);
+      cursor: pointer; color: white; border: 1px solid transparent;
+      font-weight: 600; transition: background .2s, color .2s, transform .1s;
     }
-    .tab-btn[aria-selected="true"] { background:white;color:var(--brand-dark); }
+    .tab-btn[aria-selected="true"] { background:white; color:var(--brand-dark); }
+    .tab-btn:active { transform: translateY(1px); }
 
     #theme-toggle {
-      margin-left:20px;
-      cursor:pointer;
-      padding:8px 14px;
-      background:white;
-      color:var(--brand-dark);
-      border-radius:20px;
-      font-weight:600;
-      border:none;
+      margin-left:10px; cursor:pointer; padding:8px 14px;
+      background:white; color:var(--brand-dark);
+      border-radius:20px; font-weight:600; border:none;
     }
 
+    /* ---------- PANELS ---------- */
     .panel { display:none; }
     .panel.active { display:block; }
-
     .container { padding:24px; }
 
-    .docs-layout {
-      display:grid;
-      grid-template-columns:250px 1fr;
-      gap:22px;
-    }
-
+    /* ---------- DOCS LAYOUT ---------- */
+    .docs-layout { display:grid; grid-template-columns:250px 1fr; gap:22px; }
     .sidebar {
-      background: var(--card);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:16px;
-      height: calc(100vh - 140px);
-      position:sticky;
-      top:22px;
-      overflow-y:auto;
-      transition: background 0.3s, border 0.3s;
+      background: var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:16px;
+      height: calc(100vh - 140px); position:sticky; top:22px;
+      overflow-y:auto; transition: background .3s, border .3s;
     }
-
+    .sidebar h3 { margin: 4px 8px 10px; color: var(--muted); font-size: .95rem; font-weight: 700; letter-spacing: .4px; }
     .sidebar a {
-      display:block;
-      padding:10px;
-      color:var(--text);
-      text-decoration:none;
-      border-left:4px solid transparent;
-      transition: background 0.2s, border-left-color 0.2s;
+      display:block; padding:10px 12px; color:var(--text);
+      text-decoration:none; border-left:4px solid transparent; border-radius:8px;
+      transition: background .2s, border-left-color .2s, color .2s;
     }
-    .sidebar a:hover {
-      background:rgba(108,99,255,0.10);
-      border-left-color:var(--brand);
-    }
+    .sidebar a:hover { background:rgba(108,99,255,0.10); border-left-color:var(--brand); }
 
     .block {
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:20px;
-      margin-bottom:22px;
-      transition: background 0.3s, border 0.3s;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:20px; margin-bottom:22px;
+      transition: background .3s, border .3s;
     }
+    .section-title { margin:0 0 12px; font-size:1.4rem; font-weight:600; }
 
-    .section-title {
-      margin:0 0 12px;
-      font-size:1.4rem;
-      font-weight:600;
-    }
+    .muted { color: var(--muted); }
 
     .code {
-      background:#272822;
-      color:#f8f8f2;
-      padding:14px;
-      border-radius:10px;
-      overflow-x:auto;
+      background: var(--code-bg); color: var(--code-fg);
+      padding:14px; border-radius:10px; overflow-x:auto;
+    }
+
+    /* ---------- DARK MODE OVERRIDES FOR SWAGGER & REDOC ---------- */
+    /* Swagger UI: Texte heller, Links kontrastreich */
+    :root.dark .swagger-ui, 
+    :root.dark .swagger-ui * {
+      color: #efefef !important;
+    }
+    :root.dark .swagger-ui .opblock-summary-path,
+    :root.dark .swagger-ui .opblock-summary-method,
+    :root.dark .swagger-ui .opblock-description-wrapper p,
+    :root.dark .swagger-ui .model-title,
+    :root.dark .swagger-ui .parameter__name,
+    :root.dark .swagger-ui .response-col_description__inner {
+      color: #ffffff !important;
+    }
+    :root.dark .swagger-ui .info, 
+    :root.dark .swagger-ui .scheme-container,
+    :root.dark .swagger-ui .opblock, 
+    :root.dark .swagger-ui .tab,
+    :root.dark .swagger-ui .response-col_status,
+    :root.dark .swagger-ui .response-col_description,
+    :root.dark .swagger-ui table.model {
+      background: #2b2b40 !important; /* dunklere Karten */
+      border-color: #47475b !important;
+    }
+    :root.dark .swagger-ui .topbar { background: var(--brand) !important; }
+
+    /* Redoc Wrapper – Grundtext heller */
+    :root.dark .redoc-wrap {
+      color: #efefef !important;
+    }
+    :root.dark .redoc-wrap h1, 
+    :root.dark .redoc-wrap h2, 
+    :root.dark .redoc-wrap h3, 
+    :root.dark .redoc-wrap h4 {
+      color: #ffffff !important;
+    }
+    :root.dark .redoc-wrap .menu-content, 
+    :root.dark .redoc-wrap .content, 
+    :root.dark .redoc-wrap .api-content {
+      background: #1e1e2e !important;
+    }
+    :root.dark .redoc-wrap .sc-1g2wlv-0, 
+    :root.dark .redoc-wrap .sc-1n4h6e1-0 {
+      background: #2b2b40 !important;
+    }
+    :root.dark .redoc-wrap code, 
+    :root.dark .redoc-wrap pre {
+      background: #171821 !important; color: #f0f0ff !important;
+    }
+
+    /* Small screens */
+    @media (max-width: 900px) {
+      .docs-layout { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; top: 0; }
     }
   </style>
 </head>
@@ -146,14 +175,17 @@
 <body>
   <div class="topbar">
     <div class="title-area">
-      <div class="logo">
-        <!-- Pfoten-Logo Nr. 2 -->
-        <svg viewBox="0 0 24 24">
-          <circle cx="7" cy="8" r="3"/>
-          <circle cx="17" cy="8" r="3"/>
-          <circle cx="9.5" cy="4.5" r="3"/>
-          <circle cx="14.5" cy="4.5" r="3"/>
-          <path d="M12 13c-4.418 0-8 2.239-8 5s3.582 5 8 5 8-2.239 8-5-3.582-5-8-5z"/>
+      <div class="logo" aria-label="Animal Shelter paw logo" title="Animal Shelter">
+        <!-- Elegantes Pfoten-Logo (echtes SVG, vektor-scharf). 
+             Füllt im Light-Mode weiß, im Dark-Mode ebenfalls weiß (Topbar ist farbig). -->
+        <svg viewBox="0 0 64 64" role="img" aria-hidden="true">
+          <!-- vier Zehen -->
+          <circle cx="20" cy="20" r="7" fill="white"/>
+          <circle cx="44" cy="20" r="7" fill="white"/>
+          <circle cx="28" cy="12" r="7" fill="white"/>
+          <circle cx="36" cy="12" r="7" fill="white"/>
+          <!-- Pfotenballen -->
+          <path fill="white" d="M32 28c-12 0-21 6.2-21 13.8S20 56 32 56s21-6.2 21-14.2S44 28 32 28z"/>
         </svg>
       </div>
       <div class="title">Animal Shelter API</div>
@@ -171,43 +203,47 @@
     <!-- SWAGGER -->
     <section id="panel-swagger" class="panel active">
       <div id="swagger-ui"></div>
+      <p class="muted">Use “Try it out” to explore requests. (Demo only)</p>
     </section>
 
     <!-- DOCS -->
     <section id="panel-docs" class="panel">
       <div class="docs-layout">
 
-        <nav class="sidebar">
-          #introIntroduction</a>
-          #authAuthentication</a>
-          #endpoint-listAll Endpoints</a>
-          #redoc-viewAPI Viewer</a>
+        <!-- ✅ KORREKTE SIDEBAR-LINKS -->
+        <nav class="sidebar" aria-label="Docs navigation">
+          <h3>NAVIGATION</h3>
+          <a href="#intro">Introduction</a>
+          <a href="#auth">Authentication</a>
+          <a href="#endpoint-list">All Endpoints</a>
+          <a href="#redoc-view">API Viewer</a>
         </nav>
 
-        <main class="content">
-
+        <main class="content" id="content">
           <div id="intro" class="block">
             <h2 class="section-title">Introduction</h2>
-            <p>This API showcases professional documentation for portfolio purposes.</p>
+            <p>This API showcases professional OpenAPI documentation and a polished developer portal for portfolio purposes.</p>
           </div>
 
           <div id="auth" class="block">
             <h2 class="section-title">Authentication</h2>
+            <p class="muted">All endpoints expect an API key via header:</p>
             <pre class="code">Authorization: Bearer &lt;your-api-key&gt;</pre>
-            <p>Any placeholder token works for demo.</p>
+            <p class="muted">For demo on GitHub Pages, any placeholder token works.</p>
           </div>
 
+          <!-- Automatisch generierte Endpunktliste -->
           <div id="endpoint-list" class="block">
             <h2 class="section-title">All API Endpoints</h2>
-            <p>Automatically generated from your OpenAPI file.</p>
+            <p class="muted">Generated from <code>openapi.yaml</code> at runtime.</p>
             <ul id="endpoint-list-content"></ul>
           </div>
 
+          <!-- Redoc -->
           <div id="redoc-view" class="block">
             <h2 class="section-title">API Viewer (Redoc)</h2>
             <div id="redoc-container"></div>
           </div>
-
         </main>
       </div>
     </section>
@@ -234,6 +270,8 @@
       tabDocs.setAttribute("aria-selected", "false");
       panelSwagger.classList.add("active");
       panelDocs.classList.remove("active");
+      // Scroll to top of the active panel
+      window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     tabDocs.onclick = () => {
@@ -241,6 +279,7 @@
       tabDocs.setAttribute("aria-selected", "true");
       panelSwagger.classList.remove("active");
       panelDocs.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     // Swagger UI
@@ -255,36 +294,46 @@
     // Redoc
     Redoc.init(OPENAPI_URL, {}, document.getElementById("redoc-container"));
 
-    // Generate Endpoint List
+    // Automatische Endpunktliste
     async function generateEndpointList() {
-      const response = await fetch(OPENAPI_URL);
-      const spec = jsyaml.load(await response.text());
-      const list = document.getElementById("endpoint-list-content");
+      try {
+        const response = await fetch(OPENAPI_URL);
+        const yamlText = await response.text();
+        const spec = jsyaml.load(yamlText);
 
-      const order = ["get","post","put","patch","delete"];
-      const paths = spec.paths || {};
+        const list = document.getElementById("endpoint-list-content");
+        list.innerHTML = "";
 
-      Object.keys(paths).sort().forEach(path => {
-        Object.keys(paths[path])
-          .filter(m => order.includes(m))
-          .sort((a,b) => order.indexOf(a)-order.indexOf(b))
-          .forEach(method => {
-            const li = document.createElement("li");
-            li.innerHTML = `<code>${method.toUpperCase()}</code> ${path}`;
-            list.appendChild(li);
-          });
-      });
+        const order = ["get","post","put","patch","delete"];
+        const paths = spec.paths || {};
+
+        Object.keys(paths).sort().forEach(path => {
+          Object.keys(paths[path])
+            .filter(m => order.includes(m))
+            .sort((a,b) => order.indexOf(a)-order.indexOf(b))
+            .forEach(method => {
+              const li = document.createElement("li");
+              li.innerHTML = `<code>${method.toUpperCase()}</code> ${path}`;
+              list.appendChild(li);
+            });
+        });
+      } catch (e) {
+        console.error("Endpoint list error:", e);
+      }
     }
     generateEndpointList();
 
-    // DARK MODE TOGGLE
+    // DARK MODE TOGGLE + persist
     const toggle = document.getElementById("theme-toggle");
+    const root = document.documentElement;
+    // Restore previous choice
+    if (localStorage.getItem("theme") === "dark") root.classList.add("dark");
+    toggle.textContent = root.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
     toggle.onclick = () => {
-      document.documentElement.classList.toggle("dark");
-      toggle.textContent =
-        document.documentElement.classList.contains("dark")
-          ? "☀️ Light Mode"
-          : "🌙 Dark Mode";
+      root.classList.toggle("dark");
+      const isDark = root.classList.contains("dark");
+      toggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+      localStorage.setItem("theme", isDark ? "dark" : "light");
     };
   </script>
 </body>
