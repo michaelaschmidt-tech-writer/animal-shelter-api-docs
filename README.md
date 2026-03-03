@@ -13,7 +13,7 @@ This is a portfolio project created for learning and demonstration purposes.
 🐶🐱🐰
 
 ## Live API Docs
-Interactive API reference (Swagger UI):  
+Interactive API reference (Swagger UI, Docs):  
 👉 **https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/**
 
 ## Documentation Structure
