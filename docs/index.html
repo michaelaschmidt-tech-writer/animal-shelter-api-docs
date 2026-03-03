@@ -1,22 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Animal Shelter API Docs (Swagger UI)</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css" />
-  </head>
-  <body>
-    <div id="swagger-ui"></div>
+    <title>Animal Shelter API Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"></script>
+    <!-- Swagger UI CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css"
+      integrity="sha512-3QlnM2vL2b5Yg0x6eB5K6jGZK7bqVQF0lLwQhKXk1vZk6gR3rjQ5m3mS8aZkQ7y5t0w9m6mRrH5VbS8wN3I4VQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Simple styles for tabs + docs layout -->
+    <style>
+      :root {
+        --brand: #5e35b1;
+        --bg: #f7f7fb;
+        --border: #e0e0e0;
+        --text: #333;
+      }
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
+      .topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 14px 20px; background: var(--brand); color: #fff;
+      }
+      .topbar .title { font-weight: 700; letter-spacing: .2px; }
+      .tabs { display: flex; gap: 8px; }
+      .tab-btn {
+        background: rgba(255,255,255,.14); color: #fff; border: 1px solid transparent;
+        padding: 8px 14px; border-radius: 999px; cursor: pointer; font-weight: 600;
+      }
+      .tab-btn[aria-selected="true"] { background: #fff; color: var(--brand); }
+      .container { padding: 22px; }
+      .panel { display: none; }
+      .panel.active { display: block; }
+
+      /* Option C styles (Docs panel) */
+      .docs-layout { display: grid; grid-template-columns: 260px 1fr; gap: 22px; }
+      .sidebar {
+        height: calc(100vh - 120px); position: sticky; top: 22px; background: #fff;
+        border: 1px solid var(--border); border-radius: 12px; overflow: auto;
+      }
+      .sidebar h3 { margin: 14px 16px; font-size: 1.05rem; color: #666; }
+      .sidebar a {
+        display: block; padding: 10px 16px; text-decoration: none; color: #333;
+        border-left: 4px solid transparent;
+      }
+      .sidebar a:hover { background: #f2eaff; border-left-color: var(--brand); }
+      .content {
+        min-height: 60vh;
+      }
+      .block {
+        background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 18px;
+      }
+      .section-title { margin: 6px 0 12px; font-size: 1.4rem; }
+      .code {
+        background: #272822; color: #f8f8f2; padding: 10px 12px; border-radius: 8px; overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      /* Redoc container styling */
+      #redoc-container .redoc-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+      /* Small screens */
+      @media (max-width: 900px) {
+        .docs-layout { grid-template-columns: 1fr; }
+        .sidebar { position: relative; height: auto; top: 0; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header / Tabs -->
+    <div class="topbar">
+      <div class="title">Animal Shelter API</div>
+      <div class="tabs" role="tablist" aria-label="Views">
+        <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-swagger" id="tab-swagger">Swagger UI</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-docs" id="tab-docs">Docs</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Panel 1: Swagger UI (your current setup) -->
+      <section id="panel-swagger" class="panel active" role="tabpanel" aria-labelledby="tab-swagger">
+        <div id="swagger-ui"></div>
+      </section>
+
+      <!-- Panel 2: Option C (Developer Docs + Redoc) -->
+      <section id="panel-docs" class="panel" role="tabpanel" aria-labelledby="tab-docs">
+        <div class="docs-layout">
+          <!-- Sidebar -->
+          <nav class="sidebar">
+            <h3>Documentation</h3>
+            <a href="#intro">Introduction</a>
+            <a href="#auth">Authentication</a>
+            <a href="#animals">Animals Endpoints</a>
+            <a href="#success">Success Stories</a>
+            <a href="#api">API Viewer</a>
+          </nav>
+
+          <!-- Content -->
+          <main class="content">
+            <div id="intro" class="block">
+              <h2 class="section-title">Introduction</h2>
+              <p>
+                Welcome to the Animal Shelter Management API. This portfolio project demonstrates
+                clean RESTful design, well‑structured OpenAPI documentation, and a developer‑friendly docs layout.
+              </p>
+            </div>
+
+            <div id="auth" class="block">
+              <h2 class="section-title">Authentication</h2>
+              <p>All endpoints require an API key in the <code>Authorization</code> header:</p>
+              <pre class="code">Authorization: Bearer &lt;your-api-key&gt;</pre>
+              <p>For demo purposes on GitHub Pages, you can use any placeholder key.</p>
+            </div>
+
+            <div id="animals" class="block">
+              <h2 class="section-title">Animals Endpoints</h2>
+              <ul>
+                <li><code>GET /animals</code> – Retrieve all animals</li>
+                <li><code>POST /animals</code> – Create a new animal</li>
+                <li><code>GET /animals/{id}</code> – Retrieve a specific animal</li>
+                <li><code>PUT /animals/{id}</code> – Update animal data</li>
+                <li><code>DELETE /animals/{id}</code> – Remove an animal</li>
+              </ul>
+            </div>
+
+            <div id="success" class="block">
+              <h2 class="section-title">Success Stories Endpoints</h2>
+              <ul>
+                <li><code>GET /success</code> – Retrieve adoption stories</li>
+                <li><code>POST /success</code> – Create new story</li>
+                <li><code>GET /success/{id}</code> – Retrieve a specific story</li>
+                <li><code>PUT /success/{id}</code> – Update story</li>
+                <li><code>DELETE /success/{id}</code> – Remove a story</li>
+              </ul>
+            </div>
+
+            <div id="api" class="block">
+              <h2 class="section-title">API Viewer (Redoc)</h2>
+              <div id="redoc-container"></div>
+            </div>
+          </main>
+        </div>
+      </section>
+    </div>
+
+    <!-- Swagger UI scripts -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"
+      integrity="sha512-btFBdJk3s66NycBXoHmqcaAafkR0DN4a4J8z3q3cY4v2c1gM0yD6E2e1f6Qj7lOpC9y1R6B1b5bq3m7o4/3w9A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"
+      integrity="sha512-qk6e2q8h1u3y6c6T0TH2t8m1t2E1n3y7H5U3W8QX4dZp7kqZ1c4m8ZV1jJY6J6c2oQjMZJw8qv6C6G7rj1YQ1A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- Redoc script -->
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+
+    <!-- App init: tabs + both viewers -->
     <script>
+      // Tabs
+      const tabSwagger = document.getElementById('tab-swagger');
+      const tabDocs = document.getElementById('tab-docs');
+      const panelSwagger = document.getElementById('panel-swagger');
+      const panelDocs = document.getElementById('panel-docs');
+
+      function activate(tab) {
+        const isSwagger = tab === 'swagger';
+        tabSwagger.setAttribute('aria-selected', isSwagger ? 'true' : 'false');
+        tabDocs.setAttribute('aria-selected', !isSwagger ? 'true' : 'false');
+        panelSwagger.classList.toggle('active', isSwagger);
+        panelDocs.classList.toggle('active', !isSwagger);
+      }
+
+      tabSwagger.addEventListener('click', () => activate('swagger'));
+      tabDocs.addEventListener('click', () => activate('docs'));
+
+      // ----- Configure your OpenAPI file path here -----
+      // Option A: absolute URL (wie bei dir bereits genutzt)
+      const OPENAPI_URL = "https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/openapi.yaml";
+      // Option B: wenn openapi.yaml im selben Ordner liegt, nimm einfach:
+      // const OPENAPI_URL = "openapi.yaml";
+
+      // Init Swagger UI (Panel 1)
       window.ui = SwaggerUIBundle({
-        url: "https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/openapi.yaml",
+        url: OPENAPI_URL,
         dom_id: "#swagger-ui",
         presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
-        layout: "StandaloneLayout"
+        layout: "StandaloneLayout",
+        deepLinking: true
       });
+
+      // Init Redoc (Panel 2)
+      Redoc.init(OPENAPI_URL, {
+        scrollYOffset: 0,
+        expandResponses: "200,201",
+        hideDownloadButton: false
+      }, document.getElementById('redoc-container'));
     </script>
   </body>
 </html>
