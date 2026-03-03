@@ -5,30 +5,43 @@
   <title>Animal Shelter API Docs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
   <!-- Swagger UI CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css"/>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css"/>
 
   <style>
     /* ---------- THEME TOKENS ---------- */
     :root {
-      --brand: #6C63FF;
-      --brand-dark: #5148CC;
+      /* Brand (Light) */
+      --brand-grad-start: #2E2A47;  /* deep blue-violet */
+      --brand-grad-mid:   #4E46A6;  /* indigo */
+      --brand-grad-end:   #6C63FF;  /* lavender-violet (zum Logo passend) */
+
       --bg: #F4F4FA;
       --text: #2A2A2A;
       --card: #FFFFFF;
       --border: #E0E0E0;
       --muted: #5b5b73;
+
       --code-bg: #272822;
       --code-fg: #f8f8f2;
     }
+
     :root.dark {
+      /* Brand (Dark) – dunkler, techiger Gradient mit sanfter Violett-Spitze */
+      --brand-grad-start: #141429;  /* near-black violet */
+      --brand-grad-mid:   #26234D;  /* deep indigo */
+      --brand-grad-end:   #7C74FF;  /* brighter violet tip */
+
       --bg: #1e1e2e;
-      --text: #FAFAFA;        /* Heller! */
-      --card: #2f2f43;        /* Etwas heller als zuvor */
+      --text: #FAFAFA;
+      --card: #2f2f43;
       --border: #47475b;
-      --brand: #8B80FF;
-      --brand-dark: #7267E0;
       --muted: #c7c7da;
+
       --code-bg: #171821;
       --code-fg: #f0f0ff;
     }
@@ -43,39 +56,42 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* ---------- TOPBAR ---------- */
+    /* ---------- TOPBAR (Dark-Tech-Gradient) ---------- */
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 24px;
-      background: var(--brand);
+      background: linear-gradient(135deg,
+        var(--brand-grad-start) 0%,
+        var(--brand-grad-mid) 50%,
+        var(--brand-grad-end) 100%
+      );
       color: white;
     }
     .title-area { display:flex; align-items:center; gap:14px; }
     .title { font-size: 1.6rem; font-weight: 700; letter-spacing: .2px; }
 
-    /* Paw logo (SVG inline) */
-    .logo svg {
-      width: 32px; height: 32px;
-      display: block;
-      transition: filter .3s, transform .2s ease;
-      /* leichte Glanzwirkung im Light-Mode */
-      filter: drop-shadow(0 1px 0 rgba(255,255,255,.2));
+    .logo img {
+      height: 36px; width: 36px; display:block;
+      /* leichte Kante + Glow, damit das helle Lila auf dem Gradient sauber steht */
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)) drop-shadow(0 0 6px rgba(255,255,255,.18));
+      border-radius: 6px; /* falls dein PNG eckig ist – sanfte Rundung */
+      transition: transform .15s ease;
     }
-    .logo:hover svg { transform: scale(1.04); }
+    .logo img:hover { transform: scale(1.05); }
 
     .tabs { display: flex; gap: 10px; }
     .tab-btn {
       padding: 8px 18px; border-radius: 20px;
       background: rgba(255,255,255,0.22);
-      cursor: pointer; color: white; border: 1px solid transparent;
+      cursor: pointer; color: white; border: none;
       font-weight: 600; transition: background .2s, color .2s, transform .1s;
     }
-    .tab-btn[aria-selected="true"] { background:white; color:var(--brand-dark); }
+    .tab-btn[aria-selected="true"] { background:white; color:#1c1b3a; }
     .tab-btn:active { transform: translateY(1px); }
 
     #theme-toggle {
       margin-left:10px; cursor:pointer; padding:8px 14px;
-      background:white; color:var(--brand-dark);
+      background:white; color:#2A275C;
       border-radius:20px; font-weight:600; border:none;
     }
 
@@ -92,21 +108,21 @@
       height: calc(100vh - 140px); position:sticky; top:22px;
       overflow-y:auto; transition: background .3s, border .3s;
     }
-    .sidebar h3 { margin: 4px 8px 10px; color: var(--muted); font-size: .95rem; font-weight: 700; letter-spacing: .4px; }
+    .sidebar h3 { margin: 4px 8px 10px; color: var(--muted); font-size: .95rem; font-weight: 700; }
     .sidebar a {
       display:block; padding:10px 12px; color:var(--text);
       text-decoration:none; border-left:4px solid transparent; border-radius:8px;
       transition: background .2s, border-left-color .2s, color .2s;
     }
-    .sidebar a:hover { background:rgba(108,99,255,0.10); border-left-color:var(--brand); }
+    .sidebar a:hover { background:rgba(108,99,255,0.10); border-left-color:#6C63FF; }
 
     .block {
       background:var(--card); border:1px solid var(--border);
       border-radius:14px; padding:20px; margin-bottom:22px;
       transition: background .3s, border .3s;
     }
-    .section-title { margin:0 0 12px; font-size:1.4rem; font-weight:600; }
 
+    .section-title { margin:0 0 12px; font-size:1.4rem; font-weight:600; }
     .muted { color: var(--muted); }
 
     .code {
@@ -114,60 +130,34 @@
       padding:14px; border-radius:10px; overflow-x:auto;
     }
 
-    /* ---------- DARK MODE OVERRIDES FOR SWAGGER & REDOC ---------- */
-    /* Swagger UI: Texte heller, Links kontrastreich */
+    /* ---------- DARK MODE READABILITY (Swagger + Redoc) ---------- */
     :root.dark .swagger-ui, 
-    :root.dark .swagger-ui * {
-      color: #efefef !important;
-    }
-    :root.dark .swagger-ui .opblock-summary-path,
-    :root.dark .swagger-ui .opblock-summary-method,
-    :root.dark .swagger-ui .opblock-description-wrapper p,
-    :root.dark .swagger-ui .model-title,
-    :root.dark .swagger-ui .parameter__name,
-    :root.dark .swagger-ui .response-col_description__inner {
-      color: #ffffff !important;
-    }
+    :root.dark .swagger-ui * { color: #efefef !important; }
     :root.dark .swagger-ui .info, 
     :root.dark .swagger-ui .scheme-container,
     :root.dark .swagger-ui .opblock, 
-    :root.dark .swagger-ui .tab,
-    :root.dark .swagger-ui .response-col_status,
-    :root.dark .swagger-ui .response-col_description,
-    :root.dark .swagger-ui table.model {
-      background: #2b2b40 !important; /* dunklere Karten */
+    :root.dark .swagger-ui .response,
+    :root.dark .swagger-ui .model,
+    :root.dark .swagger-ui table {
+      background: #2b2b40 !important;
       border-color: #47475b !important;
     }
-    :root.dark .swagger-ui .topbar { background: var(--brand) !important; }
+    :root.dark .swagger-ui .model-box { background:#2b2b40 !important; }
 
-    /* Redoc Wrapper – Grundtext heller */
-    :root.dark .redoc-wrap {
-      color: #efefef !important;
-    }
-    :root.dark .redoc-wrap h1, 
-    :root.dark .redoc-wrap h2, 
-    :root.dark .redoc-wrap h3, 
-    :root.dark .redoc-wrap h4 {
-      color: #ffffff !important;
-    }
+    :root.dark .redoc-wrap { color:#efefef !important; }
     :root.dark .redoc-wrap .menu-content, 
     :root.dark .redoc-wrap .content, 
     :root.dark .redoc-wrap .api-content {
       background: #1e1e2e !important;
-    }
-    :root.dark .redoc-wrap .sc-1g2wlv-0, 
-    :root.dark .redoc-wrap .sc-1n4h6e1-0 {
-      background: #2b2b40 !important;
     }
     :root.dark .redoc-wrap code, 
     :root.dark .redoc-wrap pre {
       background: #171821 !important; color: #f0f0ff !important;
     }
 
-    /* Small screens */
     @media (max-width: 900px) {
-      .docs-layout { grid-template-columns: 1fr; }
-      .sidebar { position: relative; height: auto; top: 0; }
+      .docs-layout { grid-template-columns:1fr; }
+      .sidebar { position:relative; height:auto; top:0; }
     }
   </style>
 </head>
@@ -175,19 +165,7 @@
 <body>
   <div class="topbar">
     <div class="title-area">
-      <div class="logo" aria-label="Animal Shelter paw logo" title="Animal Shelter">
-        <!-- Elegantes Pfoten-Logo (echtes SVG, vektor-scharf). 
-             Füllt im Light-Mode weiß, im Dark-Mode ebenfalls weiß (Topbar ist farbig). -->
-        <svg viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <!-- vier Zehen -->
-          <circle cx="20" cy="20" r="7" fill="white"/>
-          <circle cx="44" cy="20" r="7" fill="white"/>
-          <circle cx="28" cy="12" r="7" fill="white"/>
-          <circle cx="36" cy="12" r="7" fill="white"/>
-          <!-- Pfotenballen -->
-          <path fill="white" d="M32 28c-12 0-21 6.2-21 13.8S20 56 32 56s21-6.2 21-14.2S44 28 32 28z"/>
-        </svg>
-      </div>
+      <div class="logo"><img src="logo.png" alt="Animal Shelter logo (paw)"></div>
       <div class="title">Animal Shelter API</div>
     </div>
 
@@ -255,7 +233,6 @@
   <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 
-  <!-- INIT -->
   <script>
     const OPENAPI_URL = "openapi.yaml";
 
@@ -270,7 +247,6 @@
       tabDocs.setAttribute("aria-selected", "false");
       panelSwagger.classList.add("active");
       panelDocs.classList.remove("active");
-      // Scroll to top of the active panel
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -326,7 +302,6 @@
     // DARK MODE TOGGLE + persist
     const toggle = document.getElementById("theme-toggle");
     const root = document.documentElement;
-    // Restore previous choice
     if (localStorage.getItem("theme") === "dark") root.classList.add("dark");
     toggle.textContent = root.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
     toggle.onclick = () => {
