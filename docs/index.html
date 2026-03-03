@@ -5,14 +5,8 @@
     <title>Animal Shelter API Docs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Swagger UI CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css"
-      integrity="sha512-3QlnM2vL2b5Yg0x6eB5K6jGZK7bqVQF0lLwQhKXk1vZk6gR3rjQ5m3mS8aZkQ7y5t0w9m6mRrH5VbS8wN3I4VQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+    <!-- Swagger UI CSS (correct tag) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css" />
 
     <!-- Simple styles for tabs + docs layout -->
     <style>
@@ -50,9 +44,7 @@
         border-left: 4px solid transparent;
       }
       .sidebar a:hover { background: #f2eaff; border-left-color: var(--brand); }
-      .content {
-        min-height: 60vh;
-      }
+      .content { min-height: 60vh; }
       .block {
         background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 18px;
       }
@@ -82,7 +74,7 @@
     </div>
 
     <div class="container">
-      <!-- Panel 1: Swagger UI (your current setup) -->
+      <!-- Panel 1: Swagger UI -->
       <section id="panel-swagger" class="panel active" role="tabpanel" aria-labelledby="tab-swagger">
         <div id="swagger-ui"></div>
       </section>
@@ -148,21 +140,11 @@
       </section>
     </div>
 
-    <!-- Swagger UI scripts -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"
-      integrity="sha512-btFBdJk3s66NycBXoHmqcaAafkR0DN4a4J8z3q3cY4v2c1gM0yD6E2e1f6Qj7lOpC9y1R6B1b5bq3m7o4/3w9A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"
-      integrity="sha512-qk6e2q8h1u3y6c6T0TH2t8m1t2E1n3y7H5U3W8QX4dZp7kqZ1c4m8ZV1jJY6J6c2oQjMZJw8qv6C6G7rj1YQ1A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+    <!-- Swagger UI scripts (correct tags) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"></script>
 
-    <!-- Redoc script -->
+    <!-- Redoc script (correct tag) -->
     <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
 
     <!-- App init: tabs + both viewers -->
@@ -185,9 +167,9 @@
       tabDocs.addEventListener('click', () => activate('docs'));
 
       // ----- Configure your OpenAPI file path here -----
-      // Option A: absolute URL (wie bei dir bereits genutzt)
+      // Option A: absolute URL (deine bisherige Variante)
       const OPENAPI_URL = "https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/openapi.yaml";
-      // Option B: wenn openapi.yaml im selben Ordner liegt, nimm einfach:
+      // Option B: lokal im selben Ordner:
       // const OPENAPI_URL = "openapi.yaml";
 
       // Init Swagger UI (Panel 1)
