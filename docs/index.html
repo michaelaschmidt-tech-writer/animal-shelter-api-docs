@@ -5,6 +5,172 @@
     <title>Animal Shelter API Docs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Swagger UI CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css" />
+
+    <!-- Tab + Docs CSS -->
+    <style>
+      :root {
+        --brand: #5e35b1;
+        --bg: #f7f7fb;
+        --border: #e0e0e0;
+        --text: #333;
+      }
+      body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); }
+      .topbar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 14px 20px; background: var(--brand); color: white;
+      }
+      .title { font-size: 1.4rem; font-weight: 700; }
+      .tabs { display: flex; gap: 10px; }
+      .tab-btn {
+        padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,.2);
+        border: 1px solid transparent; cursor: pointer; color: white;
+      }
+      .tab-btn[aria-selected="true"] {
+        background: white; color: var(--brand);
+      }
+      .panel { display: none; }
+      .panel.active { display: block; }
+
+      .container { padding: 20px; }
+      .docs-layout { display: grid; grid-template-columns: 260px 1fr; gap: 22px; }
+      .sidebar {
+        background: white; border: 1px solid var(--border);
+        border-radius: 12px; padding: 15px;
+        height: calc(100vh - 140px); overflow-y: auto;
+      }
+      .sidebar a {
+        display: block; padding: 10px; text-decoration: none; color: var(--text);
+        border-left: 4px solid transparent;
+      }
+      .sidebar a:hover { background: #eee5ff; border-left-color: var(--brand); }
+      .content .block {
+        background: white; padding: 20px; border: 1px solid var(--border);
+        border-radius: 12px; margin-bottom: 20px;
+      }
+      .section-title { margin-bottom: 10px; font-size: 1.4rem; }
+      .code {
+        background: #272822; color: #f8f8f2; padding: 10px; border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <div class="topbar">
+      <div class="title">Animal Shelter API</div>
+      <div class="tabs">
+        <button class="tab-btn" id="tab-swagger" aria-selected="true">Swagger UI</button>
+        <button class="tab-btn" id="tab-docs" aria-selected="false">Docs</button>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- PANEL 1 — SWAGGER UI -->
+      <section id="panel-swagger" class="panel active">
+        <div id="swagger-ui"></div>
+      </section>
+
+      <!-- PANEL 2 — DOCS + REDOC -->
+      <section id="panel-docs" class="panel">
+        <div class="docs-layout">
+          <nav class="sidebar">
+            <a href="#intro">Introduction</a>
+            <a href="#auth">Authentication</a>
+            <a href="#animals">Animals Endpoints</a>
+            <a href="#success">Success Stories</a>
+            <a href="#redoc-view">API Viewer</a>
+          </nav>
+
+          <main class="content">
+            <div id="intro" class="block">
+              <h2 class="section-title">Introduction</h2>
+              <p>This is the portfolio API created by Michaela Schmidt.</p>
+            </div>
+
+            <div id="auth" class="block">
+              <h2 class="section-title">Authentication</h2>
+              <pre class="code">Authorization: Bearer &lt;your-api-key&gt;</pre>
+              <p>You can use any fake token.</p>
+            </div>
+
+            <div id="animals" class="block">
+              <h2 class="section-title">Animals Endpoints</h2>
+              <ul>
+                <li>GET /animals</li>
+                <li>POST /animals</li>
+                <li>GET /animals/{id}</li>
+              </ul>
+            </div>
+
+            <div id="success" class="block">
+              <h2 class="section-title">Success Stories Endpoints</h2>
+            </div>
+
+            <div id="redoc-view" class="block">
+              <h2 class="section-title">API Viewer (Redoc)</h2>
+              <div id="redoc-container"></div>
+            </div>
+
+          </main>
+        </div>
+      </section>
+    </div>
+
+    <!-- CORRECT Swagger UI SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui-standalone-preset.js"></script>
+
+    <!-- CORRECT Redoc script -->
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+
+    <!-- INIT CODE -->
+    <script>
+      const OPENAPI_URL = "openapi.yaml";  
+      // du kannst auch deine absolute URL nutzen:
+      // const OPENAPI_URL = "https://michaelaschmidt-tech-writer.github.io/animal-shelter-api-docs/openapi.yaml";
+
+      // Tabs
+      const tabSwagger = document.getElementById("tab-swagger");
+      const tabDocs = document.getElementById("tab-docs");
+      const panelSwagger = document.getElementById("panel-swagger");
+      const panelDocs = document.getElementById("panel-docs");
+
+      tabSwagger.onclick = () => {
+        tabSwagger.setAttribute("aria-selected", "true");
+        tabDocs.setAttribute("aria-selected", "false");
+        panelSwagger.classList.add("active");
+        panelDocs.classList.remove("active");
+      };
+
+      tabDocs.onclick = () => {
+        tabSwagger.setAttribute("aria-selected", "false");
+        tabDocs.setAttribute("aria-selected", "true");
+        panelSwagger.classList.remove("active");
+        panelDocs.classList.add("active");
+      };
+
+      // Swagger UI init
+      window.ui = SwaggerUIBundle({
+        url: OPENAPI_URL,
+        dom_id: "#swagger-ui",
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        layout: "StandaloneLayout",
+      });
+
+      // Redoc init
+      Redoc.init(OPENAPI_URL, {}, document.getElementById("redoc-container"));
+    </script>
+  </body>
+</html><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animal Shelter API Docs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <!-- Swagger UI CSS (correct tag) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.3/swagger-ui.css" />
 
