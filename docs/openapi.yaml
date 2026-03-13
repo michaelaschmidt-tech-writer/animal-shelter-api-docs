@@ -290,21 +290,16 @@ components:
       type: object
       description: Details about an adoption success story.
       properties:
-        id:
-          type: string
-          example: "s789"
-        animalId:
-          type: string
+        id: { type: string }
+        animalId: { type: string }
         title:
           type: string
           description: Short headline describing the success story.
-        description:
-          type: string
+        description: { type: string }
         adoptionDate:
           type: string
           format: date
-        adopter:
-          type: string
+        adopter: { type: string }
         photoUrl:
           type: string
           nullable: true
@@ -323,7 +318,8 @@ components:
 
     SuccessList:
       type: array
-      items: { $ref: '#/components/schemas/SuccessStory' }
+      items:
+        $ref: '#/components/schemas/SuccessStory'
 
     SuccessPhoto:
       type: object
@@ -331,7 +327,6 @@ components:
         id: { type: string }
         photoUrl: { type: string }
       required: [id, photoUrl]
-
 
     ##############################################################
     # ANIMALS
@@ -420,6 +415,11 @@ components:
           type: string
           enum: [healthy, needs_care, critical]
       required: [name, species, age]
+
+    AnimalList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Animal'
 
     Error:
       type: object
